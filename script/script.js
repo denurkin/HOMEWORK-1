@@ -7,43 +7,44 @@ const title = prompt('Как называется ваш проект?'),
       servicePrice1 = +prompt('Сколько это будет стоить?'), 
       service2 = prompt('Какой дополнительный тип услуги нужен?'),
       servicePrice2 = +prompt('Сколько это будет стоить?'),
-      fullPrice = screenPrice + servicePrice1 + servicePrice2,
-      servicePercentPrice = fullPrice - fullPrice * (rollback/100);
+      getAllServicePrices = (arg1, arg2) => {
+        return arg1 + arg2;
+      },
+      allServicePrices = getAllServicePrices(servicePrice1, servicePrice2),
+      fullPrice = getFullPrice(screenPrice, allServicePrices),
+      getServicePercentPrices = (arg1, arg2) => {
+        Math.ceil(arg1 - arg1 * (arg2/100))
+      },
+      servicePercentPrice = getServicePercentPrices(fullPrice, rollback),
+      showTypeOf = (variable) => {
+        console.log(variable, typeof variable);
+      },
+      getRollbackMessage = (price) => {
+        switch(true){
+            case price >= 30000:
+                return 'Даем скидку в 10%';
+            case price >= 15000:
+                return 'Даем скидку в 5%';
+            case price >= 0:
+                return 'Скидка не предусмотрена';    
+            default:
+                return 'Что то пошло не так';
+          };
+      },
+      getTitle = (arg) => {
+        arg = arg.trim(); 
+        arg = arg[0].toUpperCase() + arg.substring(1);
+        return arg;
+      };
 
-      console.log(fullPrice);
-      console.log(Math.ceil(servicePercentPrice));
-
-      switch(true){
-        case fullPrice >= 30000:
-            console.log('Даем скидку в 10%');
-            break;
-     
-        case fullPrice >= 15000:
-            console.log('Даем скидку в 5%');
-            break;
-     
-        case fullPrice >= 0:
-            console.log('Скидка не предусмотрена');
-            break;
-
-        case fullPrice < 0:
-            console.log('Что то пошло не так');
-            break;
+      function getFullPrice(arg1, arg2) {
+      return arg1 + arg2;
       }
 
+      showTypeOf(title)
+      showTypeOf(adaptive)
+      showTypeOf(fullPrice)      
 
-      console.log(typeof(title));
-      console.log(typeof(adaptive));
-      console.log(typeof(fullPrice));
-      console.log(String(screenPrice).length);
-      console.log(`Стоимость верстки экранов ${screenPrice} рублей/ долларов/гривен/юани” и “Стоимость разработки сайта ${fullPrice} рублей/ долларов/гривен/юани`);
+      console.log(getRollbackMessage(fullPrice));
+      console.log(getServicePercentPrices);
       console.log(screens.toLocaleLowerCase().split());
-      console.log(fullPrice * (rollback/100));
-
-
-
-
-
-
-
-
