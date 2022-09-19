@@ -1,61 +1,54 @@
-let   title,
-      screens,
-      screenPrice,
-      adaptive,
-      rollback = 1,
-      service1, 
-      servicePrice1, 
-      service2,
-      servicePrice2,
-      allServicePrices,
-      fullPrice,
-      servicePercentPrice; 
-
-      function getFullPrice(arg1, arg2) {
-      return arg1 + arg2;
-      }
-
-const isNumber = (num) => {
+const appData = {
+      title: "",
+      screens: "", 
+      screenPrice: 0,
+      adaptive: true,
+      rollback: 10,
+      service1: "",
+      service2: '',
+      allServicePrices: 0,
+      fullPrice: 0,
+      servicePercentPrice: 0,
+      isNumber: function(num) {
         return !isNaN(parseFloat(num) && isFinite(num));
       },
-      asking = () => {
-        title = prompt('Как называется ваш проект?');
-        screens = prompt('Какие типы экранов нужно разработать?',"Простые, Сложные, Интерактивные");
+      asking: function() {
+        appData.title = prompt('Как называется ваш проект?');
+        appData.screens = prompt('Какие типы экранов нужно разработать?',"Простые, Сложные, Интерактивные");
         
         do {
-          screenPrice = prompt('Сколько будет стоить данная работа?', '12000')
-        } while (!isNumber(screenPrice))
+          appData.screenPrice = prompt('Сколько будет стоить данная работа?', '12000')
+        } while (!appData.isNumber(appData.screenPrice))
 
-        adaptive = confirm('Нужен ли адаптив на сайте?');
-      }, 
-      getAllServicePrices = () => {
+       appData.adaptive = confirm('Нужен ли адаптив на сайте?');
+      },
+      getFullPrice: function(arg1, arg2) {
+        return arg1 + arg2;
+      },
+      getAllServicePrices: function() {
         let sum,
             res = 0;
 
         for (let i = 0; i < 2; i++) {
           if (i === 0) {
-            service1 = prompt('Какой дополнительный тип услуги нужен?') 
+            appData.service1 = prompt('Какой дополнительный тип услуги нужен?') 
           } else if (i === 1) {
-            service2 = prompt('Какой дополнительный тип услуги нужен?')
+            appData.service2 = prompt('Какой дополнительный тип услуги нужен?')
           };
 
           do {
             sum = prompt('Сколько это будет стоить?')
-          } while (!isNumber(sum))
+          } while (!appData.isNumber(sum))
 
           res = res + +sum
         };
 
-        console.log(res);
         return res
-      }, 
-      getServicePercentPrices = (arg1, arg2) => {
+      },
+      getServicePercentPrices: function(arg1, arg2) {
         Math.ceil(arg1 - arg1 * (arg2/100))
       },
-      showTypeOf = (variable) => {
-        console.log(variable, typeof variable);
-      },
-      getRollbackMessage = (price) => {
+      getRollbackMessage: function(price) {
         switch(true){
             case price >= 30000:
                 return 'Даем скидку в 10%';
@@ -67,24 +60,30 @@ const isNumber = (num) => {
                 return 'Что то пошло не так';
           };
       },
-      getTitle = (arg) => {
+      getTitle: function(arg) {
         arg = arg.trim(); 
         arg = arg[0].toUpperCase() + arg.substring(1);
         return arg;
-      };
+      },
+      logger: function() {
+        for (let key in appData) {
+          console.log("Ключ:" + key + " " + "Значение:" + appData[key])
+        }
+      },
+      start: function() {
+        appData.asking();
 
 
-      asking();
+        appData.allServicePrices = appData.getAllServicePrices(),
+        appData.fullPrice = appData.getFullPrice(appData.screenPrice, appData.allServicePrices),
+        appData.servicePercentPrice = appData.getServicePercentPrices(appData.fullPrice, appData.rollback);
 
-      allServicePrices = getAllServicePrices(),
-      fullPrice = getFullPrice(screenPrice, allServicePrices),
-      servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
+        appData.logger();
+      }
+}
 
 
-      showTypeOf(title)
-      showTypeOf(adaptive)
-      showTypeOf(fullPrice)      
 
-      console.log(getRollbackMessage(fullPrice));
-      console.log(getServicePercentPrices());
-      console.log(screens.toLocaleLowerCase().split(","));
+appData.start();
+
+  
